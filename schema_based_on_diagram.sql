@@ -33,6 +33,14 @@ id INT PRIMARY KEY,
 type VARCHAR,
 name VARCHAR
 );
+--create JOIN table for many to many relationship
+CREATE TABLE medical_histories_treatments (
+    medical_history_id INT REFERENCES medical_histories(id),
+    treatment_id INT REFERENCES treatments(id)
+);
 
 -- Create index on medical_histories.patiend_id for improved perfomance
 CREATE INDEX medical_histories_patient_id_asc ON medical_histories(patient_id ASC);
+CREATE INDEX treatments_id ON treatments(id);
+CREATE INDEX medical_histories_id ON medical_histories(id);
+CREATE INDEX patients_id ON patients(id);
