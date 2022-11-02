@@ -7,7 +7,7 @@ date_of_birth DATE
 CREATE TABLE medical_histories (
 id INT PRIMARY KEY,
 admitted_at TIMESTAMP,
-patient_id INT,
+patient_id INT NULL REFERENCES patients(id) INT,
 status VARCHAR
 );
 
@@ -16,7 +16,7 @@ id INT PRIMARY KEY,
 total_amount DECIMAL,
 generated_at TIMESTAMP,
 payed_at TIMESTAMP,
-medical_history_id INT
+medical_history_id INT NULL REFERENCES medical_histories(id)
 );
 
 CREATE TABLE invoice_items(
@@ -24,8 +24,8 @@ id INT PRIMARY KEY,
 unit_price DECIMAL,
 quantity INT,
 total_price DECIMAL,
-invoice_id INT,
-treatment_id INT
+invoice_id INT NULL REFERENCES invoices(id),
+treatment_id INT NULL REFERENCES treatments(id)
 );
 
 CREATE TABLE treatments (
@@ -39,8 +39,12 @@ CREATE TABLE medical_histories_treatments (
     treatment_id INT REFERENCES treatments(id)
 );
 
--- Create index on medical_histories.patiend_id for improved perfomance
+-- Create indexes for improved perfomance
 CREATE INDEX medical_histories_patient_id_asc ON medical_histories(patient_id ASC);
 CREATE INDEX treatments_id ON treatments(id);
+CREATE INDEX invoice_items_id ON invoice_items(id);
+CREATE INDEX invoices_id ON invoices(id);
 CREATE INDEX medical_histories_id ON medical_histories(id);
 CREATE INDEX patients_id ON patients(id);
+CREATE INDEX medical_histories_treatments_medical_history_id ON medical_histories_treatments(medical_history_id);
+CREATE INDEX medical_histories_treatments_treatment_id ON medical_histories_treatments(treatment_id);
